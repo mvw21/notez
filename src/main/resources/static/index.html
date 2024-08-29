@@ -53,7 +53,7 @@
             font-weight: bold;
             text-align: center;
         }
-        #random-note span.label {
+        #random-note .red {
             color: red;
         }
     </style>
@@ -82,9 +82,9 @@
     <p id="message"></p>
 
     <div id="random-note">
-        <h3 id="random-note-title"><span class="label">Title:</span> </h3>
-        <p id="random-note-content"><span class="label">Content:</span> </p>
-        <p id="random-note-type"><span class="label">Type:</span> </p>
+        <h3 id="random-note-title"></h3>
+        <p id="random-note-content"></p>
+        <p id="random-note-type"></p>
     </div>
 </div>
 
@@ -122,9 +122,9 @@
         const typeEl = document.getElementById('random-note-type');
 
         if (response.ok) {
-            titleEl.innerHTML = `<span class="label">Title:</span> ${note.title}`;
-            contentEl.innerHTML = `<span class="label">Content:</span> ${note.content}`;
-            typeEl.innerHTML = `<span class="label">Type:</span> ${note.type}`;
+            titleEl.innerHTML = `<span class="red">Title:</span> ${note.title}`;
+            contentEl.innerHTML = `<span class="red">Content:</span> ${note.content}`;
+            typeEl.innerHTML = `<span class="red">Type:</span> ${note.type}`;
         } else {
             titleEl.textContent = '';
             contentEl.textContent = 'Failed to load note';
