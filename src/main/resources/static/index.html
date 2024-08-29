@@ -56,6 +56,18 @@
         #random-note .red {
             color: red;
         }
+        #edit-note-button {
+            margin-top: 15px;
+            display: none;
+            padding: 10px;
+            background-color: #d0d0d0;
+            border: 1px solid #999;
+            cursor: pointer;
+            text-align: center;
+        }
+        #edit-note-button:hover {
+            background-color: #c0c0c0;
+        }
     </style>
 </head>
 <body>
@@ -86,9 +98,13 @@
         <p id="random-note-content"></p>
         <p id="random-note-type"></p>
     </div>
+
+    <button id="edit-note-button" onclick="editRandomNote()">Edit Note</button>
 </div>
 
 <script>
+    let currentNoteId = null; // To store the ID of the currently displayed random note
+
     async function saveNote() {
         const title = document.getElementById('title').value;
         const content = document.getElementById('content').value;
@@ -120,15 +136,29 @@
         const titleEl = document.getElementById('random-note-title');
         const contentEl = document.getElementById('random-note-content');
         const typeEl = document.getElementById('random-note-type');
+        const editButton = document.getElementById('edit-note-button');
 
         if (response.ok) {
+            currentNoteId = note.id; // Store the ID of the fetched note
             titleEl.innerHTML = `<span class="red">Title:</span> ${note.title}`;
             contentEl.innerHTML = `<span class="red">Content:</span> ${note.content}`;
             typeEl.innerHTML = `<span class="red">Type:</span> ${note.type}`;
+            editButton.style.display = 'block'; // Show the "Edit Note" button
         } else {
             titleEl.textContent = '';
             contentEl.textContent = 'Failed to load note';
             typeEl.textContent = '';
+            editButton.style.display = 'none'; // Hide the "Edit Note" button
+        }
+    }
+
+    function editRandomNote() {
+        if (currentNoteId) {
+            // Redirect or load the note into the edit fields
+            // For example, you could populate the form fields with the note's data
+            document.getElementById('title').value = document.getElementById('random-note-title').textContent.replace('Title: ', '');
+            document.getElementById('content').value = document.getElementById('random-note-content').textContent.replace('Content: ', '');
+            document.getElementById('type').value = document.getElementById('random-note-type').textContent.replace('Type: ', '');
         }
     }
 </script>

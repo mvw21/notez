@@ -34,6 +34,20 @@ public class NotesController {
         }
     }
 
+    @CrossOrigin(origins = "https://helpful-growth-production.up.railway.app")
+    @PostMapping("/edit")
+    public ResponseEntity<String> editNote(@RequestBody NoteDto noteDTO) {
+        try {
+            notesService.edit(noteDTO);
+            // Return 200 OK with a success message
+            return ResponseEntity.status(HttpStatus.OK).body("Note edit successful");
+        } catch (Exception e) {
+            // Log the exception and return 500 Internal Server Error with an error message
+            e.printStackTrace(); // This will print the exception stack trace in the console
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to edit note");
+        }
+    }
+
     @GetMapping("/random")
     public ResponseEntity<NoteDto> getRandomNote() {
         NoteDto randomNote = notesService.getRandomNote();

@@ -1,11 +1,13 @@
 package notez.notez;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 @Service
@@ -26,6 +28,25 @@ public class NotesService implements NoteService{
     @Override
     public void save(NoteDto noteDto) {
         notesRepository.save(noteTransformer.toEntity(noteDto));
+    }
+
+    @Override
+    public void edit(NoteDto noteDto) {
+        // Load the existing note entity
+        NoteEntity note = notesRepository.findByLongId(noteDto.getId());
+
+        // Check if the note exists
+        if (note == null) {
+            throw new EntityNotFoundException("Note not found");
+        }
+
+        // Update the fields of the existing note with the new data
+        note.setTitle(noteDto.getTitle());
+        note.setContent(noteDto.getContent());
+        note.setType(noteDto.getType());
+
+        // Save the updated entity back to the database
+        notesRepository.save(note);
     }
 
     @Override

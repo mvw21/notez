@@ -1,9 +1,18 @@
 package notez.notez;
 
 public class NoteDto {
+    private Long id;
     private String title;
     private String content;
     private NoteType type;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getTitle() {
         return title;
