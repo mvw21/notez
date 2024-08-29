@@ -48,6 +48,11 @@
             font-weight: bold;
             text-align: center;
         }
+        #random-note {
+            margin-top: 20px;
+            font-weight: bold;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -72,6 +77,12 @@
     <button onclick="fetchRandomNote()">Random Note</button>
 
     <p id="message"></p>
+
+    <div id="random-note">
+        <h3 id="random-note-title"></h3>
+        <p id="random-note-content"></p>
+        <p id="random-note-type"></p>
+    </div>
 </div>
 
 <script>
@@ -103,10 +114,18 @@
         const response = await fetch('/api/notes/random');
         const note = await response.json();
 
+        const titleEl = document.getElementById('random-note-title');
+        const contentEl = document.getElementById('random-note-content');
+        const typeEl = document.getElementById('random-note-type');
+
         if (response.ok) {
-            document.getElementById('random-note-title').textContent = note.title;
-            document.getElementById('random-note-content').textContent = note.content;
-            document.getElementById('random-note-type').textContent = note.type;
+            titleEl.textContent = `Title: ${note.title}`;
+            contentEl.textContent = `Content: ${note.content}`;
+            typeEl.textContent = `Type: ${note.type}`;
+        } else {
+            titleEl.textContent = '';
+            contentEl.textContent = 'Failed to load note';
+            typeEl.textContent = '';
         }
     }
 </script>
