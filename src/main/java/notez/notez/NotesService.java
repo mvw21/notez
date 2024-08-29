@@ -32,21 +32,17 @@ public class NotesService implements NoteService{
 
     @Override
     public void edit(NoteDto noteDto) {
-        // Load the existing note entity
-        NoteEntity note = notesRepository.findByLongId(noteDto.getId());
-
-        // Check if the note exists
-        if (note == null) {
-            throw new EntityNotFoundException("Note not found");
-        }
+        // Load the existing note entity and throw an exception if not found
+        NoteEntity noteEntity = notesRepository.findById(noteDto.getId())
+                .orElseThrow(() -> new EntityNotFoundException("Note not found"));
 
         // Update the fields of the existing note with the new data
-        note.setTitle(noteDto.getTitle());
-        note.setContent(noteDto.getContent());
-        note.setType(noteDto.getType());
+        noteEntity.setTitle(noteDto.getTitle());
+        noteEntity.setContent(noteDto.getContent());
+        noteEntity.setType(noteDto.getType());
 
         // Save the updated entity back to the database
-        notesRepository.save(note);
+        notesRepository.save(noteEntity);
     }
 
     @Override
