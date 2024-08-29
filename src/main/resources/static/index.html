@@ -16,13 +16,13 @@
 </div>
 
 <div>
-    <label>Title</label>
+    <label for="title">Title</label>
     <input id="title" type="text" />
 
-    <label>Content</label>
+    <label for="content">Content</label>
     <textarea id="content"></textarea>
 
-    <label>Type</label>
+    <label for="type">Type</label>
     <select id="type">
         <option value="PFGAME">PFGAME</option>
         <option value="LIFE">LIFE</option>
@@ -31,8 +31,9 @@
     </select>
 
     <button onclick="saveNote()">Save Note</button>
-    <p id="message"></p>
 </div>
+
+<p id="message"></p>
 
 <script>
     async function saveNote() {
