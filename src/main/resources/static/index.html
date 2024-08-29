@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notes App</title>
+</head>
+<body>
+<h1>Notes App</h1>
+<button onclick="fetchRandomNote()">Random Note</button>
+
+<div id="random-note">
+    <h3 id="random-note-title"></h3>
+    <p id="random-note-content"></p>
+    <p id="random-note-type"></p>
+</div>
+
+<div>
+    <label>Title</label>
+    <input id="title" type="text" />
+
+    <label>Content</label>
+    <textarea id="content"></textarea>
+
+    <label>Type</label>
+    <select id="type">
+        <option value="PFGAME">PFGAME</option>
+        <option value="LIFE">LIFE</option>
+        <option value="CODING">CODING</option>
+        <option value="OTHER">OTHER</option>
+    </select>
+
+    <button onclick="saveNote()">Save Note</button>
+    <p id="message"></p>
+</div>
+
+<script>
+    async function saveNote() {
+        const title = document.getElementById('title').value;
+        const content = document.getElementById('content').value;
+        const type = document.getElementById('type').value;
+
+        const response = await fetch('/api/notes/save', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ title, content, type }),
+        });
+
+        const messageEl = document.getElementById('message');
+        if (response.ok) {
+            messageEl.textContent = 'Note saved!';
+            document.getElementById('title').value = '';
+            document.getElementById('content').value = '';
+            document.getElementById('type').value = 'PFGAME';
+        } else {
+            messageEl.textContent = 'Failed to save note';
+        }
+    }
+
+    async function fetchRandomNote() {
+        const response = await fetch('/api/notes/random');
+        const note = await response.json();
+
+        if (response.ok) {
+            document.getElementById('random-note-title').textContent = note.title;
+            document.getElementById('random-note-content').textContent = note.content;
+            document.getElementById('random-note-type').textContent = note.type;
+        }
+    }
+</script>
+</body>
+</html>
