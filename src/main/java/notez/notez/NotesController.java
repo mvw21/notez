@@ -20,6 +20,7 @@ public class NotesController {
         return notesService.getAllNotes();
     }
 
+    @CrossOrigin(origins = "https://helpful-growth-production.up.railway.app")
     @PostMapping("/save")
     public ResponseEntity<String> saveNote(@RequestBody NoteDto noteDTO) {
         try {
