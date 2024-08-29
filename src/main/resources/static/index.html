@@ -110,17 +110,27 @@
         const content = document.getElementById('content').value;
         const type = document.getElementById('type').value;
 
-        const response = await fetch('/api/notes/save', {
+        const noteData = {
+            id: currentNoteId,  // Use the currentNoteId to update the existing note
+            title: title,
+            content: content,
+            type: type
+        };
+
+        const url = currentNoteId ? '/api/notes/edit' : '/api/notes/save'; // Determine the URL based on whether we're editing or creating a note
+
+        const response = await fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ title, content, type }),
+            body: JSON.stringify(noteData),
         });
 
         const messageEl = document.getElementById('message');
         if (response.ok) {
             messageEl.textContent = 'Note saved!';
+            currentNoteId = null; // Reset the ID after saving
             document.getElementById('title').value = '';
             document.getElementById('content').value = '';
             document.getElementById('type').value = 'PFGAME';
@@ -154,8 +164,7 @@
 
     function editRandomNote() {
         if (currentNoteId) {
-            // Redirect or load the note into the edit fields
-            // For example, you could populate the form fields with the note's data
+            // Populate the form fields with the note's data
             document.getElementById('title').value = document.getElementById('random-note-title').textContent.replace('Title: ', '');
             document.getElementById('content').value = document.getElementById('random-note-content').textContent.replace('Content: ', '');
             document.getElementById('type').value = document.getElementById('random-note-type').textContent.replace('Type: ', '');
