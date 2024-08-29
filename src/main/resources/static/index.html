@@ -56,7 +56,7 @@
         #random-note .red {
             color: red;
         }
-        #edit-note-button {
+        #edit-note-button, #delete-note-button {
             margin-top: 15px;
             display: none;
             padding: 10px;
@@ -65,7 +65,7 @@
             cursor: pointer;
             text-align: center;
         }
-        #edit-note-button:hover {
+        #edit-note-button:hover, #delete-note-button:hover {
             background-color: #c0c0c0;
         }
     </style>
@@ -100,6 +100,7 @@
     </div>
 
     <button id="edit-note-button" onclick="editRandomNote()">Edit Note</button>
+    <button id="delete-note-button" onclick="deleteRandomNote()">Delete Note</button>
 </div>
 
 <script>
@@ -147,6 +148,7 @@
         const contentEl = document.getElementById('random-note-content');
         const typeEl = document.getElementById('random-note-type');
         const editButton = document.getElementById('edit-note-button');
+        const deleteButton = document.getElementById('delete-note-button');
 
         if (response.ok) {
             currentNoteId = note.id; // Store the ID of the fetched note
@@ -154,11 +156,13 @@
             contentEl.innerHTML = `<span class="red">Content:</span> ${note.content}`;
             typeEl.innerHTML = `<span class="red">Type:</span> ${note.type}`;
             editButton.style.display = 'block'; // Show the "Edit Note" button
+            deleteButton.style.display = 'block'; // Show the "Delete Note" button
         } else {
             titleEl.textContent = '';
             contentEl.textContent = 'Failed to load note';
             typeEl.textContent = '';
             editButton.style.display = 'none'; // Hide the "Edit Note" button
+            deleteButton.style.display = 'none'; // Hide the "Delete Note" button
         }
     }
 
@@ -168,6 +172,32 @@
             document.getElementById('title').value = document.getElementById('random-note-title').textContent.replace('Title: ', '');
             document.getElementById('content').value = document.getElementById('random-note-content').textContent.replace('Content: ', '');
             document.getElementById('type').value = document.getElementById('random-note-type').textContent.replace('Type: ', '');
+        }
+    }
+
+    async function deleteRandomNote() {
+        if (currentNoteId) {
+            const response = await fetch('/api/notes/delete', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ id: currentNoteId }), // Only send the ID for deletion
+            });
+
+            const messageEl = document.getElementById('message');
+            if (response.ok) {
+                messageEl.textContent = 'Note deleted successfully';
+                currentNoteId = null; // Clear the current note ID
+                // Optionally clear the form or random note display after deletion
+                document.getElementById('random-note-title').textContent = '';
+                document.getElementById('random-note-content').textContent = '';
+                document.getElementById('random-note-type').textContent = '';
+                document.getElementById('edit-note-button').style.display = 'none'; // Hide the edit button
+                document.getElementById('delete-note-button').style.display = 'none'; // Hide the delete button
+            } else {
+                messageEl.textContent = 'Failed to delete note';
+            }
         }
     }
 </script>

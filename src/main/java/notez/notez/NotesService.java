@@ -46,6 +46,11 @@ public class NotesService implements NoteService{
     }
 
     @Override
+    public void delete(Long id) {
+        notesRepository.deleteById(id);
+    }
+
+    @Override
     public NoteDto getRandomNote() {
         long count = notesRepository.count(); // Get total count of notes
 
