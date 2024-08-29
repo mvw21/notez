@@ -4,18 +4,46 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Notes App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        #note-form {
+            display: flex;
+            flex-direction: column;
+            max-width: 300px;
+            margin-top: 20px;
+        }
+        #note-form label {
+            margin-top: 10px;
+        }
+        #note-form input, #note-form textarea, #note-form select, #note-form button {
+            margin-top: 5px;
+            padding: 5px;
+            font-size: 16px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        #note-form button {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            cursor: pointer;
+        }
+        #note-form button:hover {
+            background-color: #e0e0e0;
+        }
+        #message {
+            margin-top: 15px;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
 <h1>Notes App</h1>
-<button onclick="fetchRandomNote()">Random Note</button>
 
-<div id="random-note">
-    <h3 id="random-note-title"></h3>
-    <p id="random-note-content"></p>
-    <p id="random-note-type"></p>
-</div>
-
-<div>
+<div id="note-form">
     <label for="title">Title</label>
     <input id="title" type="text" />
 
@@ -31,6 +59,7 @@
     </select>
 
     <button onclick="saveNote()">Save Note</button>
+    <button onclick="fetchRandomNote()">Random Note</button>
 </div>
 
 <p id="message"></p>
