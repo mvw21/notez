@@ -76,7 +76,7 @@ public class NotesService implements NoteService{
     @Override
     public NoteDto getRandomTodoNote() {
         // Get total count of TODO notes directly from the repository
-        long count = notesRepository.countByType(NoteType.TODO);
+        long count = notesRepository.countByType(NoteType.OTHER);
 
         if (count == 0) {
             return null; // Handle the case where there are no TODO notes
@@ -85,7 +85,7 @@ public class NotesService implements NoteService{
         int randomIndex = (int) (Math.random() * count); // Generate a random index
         Pageable pageable = PageRequest.of(randomIndex, 1); // Fetch one TODO note at the random index
 
-        List<NoteEntity> randomNotes = notesRepository.findByType(NoteType.TODO, pageable).getContent();
+        List<NoteEntity> randomNotes = notesRepository.findByType(NoteType.OTHER, pageable).getContent();
 
         if (!randomNotes.isEmpty()) {
             NoteEntity randomNote = randomNotes.get(0);
