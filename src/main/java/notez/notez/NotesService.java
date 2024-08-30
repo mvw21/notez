@@ -1,14 +1,14 @@
 package notez.notez;
 
 import jakarta.persistence.EntityNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -76,6 +76,8 @@ public class NotesService implements NoteService{
 
     @Override
     public NoteDto getRandomTodoNote() {
+        Logger logger = LoggerFactory.getLogger(NotesService.class);
+
         // Fetch all notes of type TODO from the database
         List<NoteEntity> todoNotes = notesRepository.findAll()
                 .stream()
@@ -84,14 +86,17 @@ public class NotesService implements NoteService{
 
         // Check if there are any TODO notes
         if (todoNotes.isEmpty()) {
+            logger.info("No TODO notes found.");
             return null; // Handle the case where there are no TODO notes
         }
 
         // Generate a random index within the list of TODO notes
         int randomIndex = (int) (Math.random() * todoNotes.size());
+        logger.info("Random Index: " + randomIndex);
 
         // Get the random TODO note
         NoteEntity randomTodoNote = todoNotes.get(randomIndex);
+        logger.info("Selected Note ID: " + randomTodoNote.getId() + ", Title: " + randomTodoNote.getTitle());
 
         // Convert the NoteEntity to NoteDto and return it
         return noteTransformer.toDto(randomTodoNote);
