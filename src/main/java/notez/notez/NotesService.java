@@ -1,13 +1,12 @@
 package notez.notez;
 
 import jakarta.persistence.EntityNotFoundException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -76,29 +75,18 @@ public class NotesService implements NoteService{
 
     @Override
     public NoteDto getRandomTodoNote() {
-        Logger logger = LoggerFactory.getLogger(NotesService.class);
-
-        // Fetch all notes of type TODO from the database
         List<NoteEntity> todoNotes = notesRepository.findAll()
                 .stream()
                 .filter(note -> note.getType() == NoteType.TODO)
                 .collect(Collectors.toList());
 
-        // Check if there are any TODO notes
         if (todoNotes.isEmpty()) {
-            logger.info("No TODO notes found.");
-            return null; // Handle the case where there are no TODO notes
+            return null;
         }
 
-        // Generate a random index within the list of TODO notes
-        int randomIndex = (int) (Math.random() * todoNotes.size());
-        logger.info("Random Index: " + randomIndex);
+        Collections.shuffle(todoNotes); // Shuffle the list to ensure randomness
+        NoteEntity randomTodoNote = todoNotes.get(0); // Select the first note after shuffling
 
-        // Get the random TODO note
-        NoteEntity randomTodoNote = todoNotes.get(randomIndex);
-        logger.info("Selected Note ID: " + randomTodoNote.getId() + ", Title: " + randomTodoNote.getTitle());
-
-        // Convert the NoteEntity to NoteDto and return it
         return noteTransformer.toDto(randomTodoNote);
     }
 
