@@ -12,6 +12,8 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+import static sun.jvm.hotspot.runtime.BasicObjectLock.size;
+
 @Service
 public class NotesService implements NoteService{
 
@@ -76,7 +78,9 @@ public class NotesService implements NoteService{
     @Override
     public NoteDto getRandomTodoNote() {
         // Get total count of TODO notes directly from the repository
-        long count = notesRepository.countByType(NoteType.OTHER);
+//        long count = notesRepository.countByType(NoteType.OTHER);
+        List<NoteEntity> other = notesRepository.findAll().stream().filter(x -> x.getType().name().equals("OTHER")).toList();
+        long count = other.size();
 
         if (count == 0) {
             return null; // Handle the case where there are no TODO notes
@@ -85,10 +89,12 @@ public class NotesService implements NoteService{
         int randomIndex = (int) (Math.random() * count); // Generate a random index
         Pageable pageable = PageRequest.of(randomIndex, 1); // Fetch one TODO note at the random index
 
-        List<NoteEntity> randomNotes = notesRepository.findByType(NoteType.OTHER, pageable).getContent();
+//        List<NoteEntity> randomNotes = notesRepository.findByType(NoteType.OTHER, pageable).getContent();
+        List<NoteEntity> randomNotes = notesRepository.findAll(pageable).getContent();
+        List<NoteEntity> other1 = randomNotes.stream().filter(x -> x.getType().name().equals("OTHER")).collect(Collectors.toList());
 
-        if (!randomNotes.isEmpty()) {
-            NoteEntity randomNote = randomNotes.get(0);
+        if (!other1.isEmpty()) {
+            NoteEntity randomNote = other1.get(0);
             return noteTransformer.toDto(randomNote);
         } else {
             return null; // Handle the case where the note wasn't found
