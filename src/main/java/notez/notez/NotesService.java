@@ -76,11 +76,9 @@ public class NotesService implements NoteService{
 
     @Override
     public NoteDto getRandomTodoNote() {
-        // Fetch all notes from the database
-        List<NoteEntity> allNotes = notesRepository.findAll();
-
-        // Filter notes by type TODO
-        List<NoteEntity> todoNotes = allNotes.stream()
+        // Fetch all notes of type TODO from the database
+        List<NoteEntity> todoNotes = notesRepository.findAll()
+                .stream()
                 .filter(note -> note.getType() == NoteType.TODO)
                 .collect(Collectors.toList());
 
