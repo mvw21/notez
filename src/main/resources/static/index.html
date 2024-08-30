@@ -12,20 +12,21 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: black; /* Set background to black */
-            color: white; /* Set text color to white */
+            background-color: #121212; /* Changed to black background */
+            color: #ffffff; /* Changed to white text */
         }
         #note-form {
             display: flex;
             flex-direction: column;
             width: 300px;
             padding: 20px;
-            background-color: #333; /* Dark background for the form */
+            background-color: #1e1e1e; /* Darker background for the form */
             border-radius: 8px;
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1); /* Light shadow */
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
         }
         #note-form label {
             margin-top: 10px;
+            color: #ffffff; /* Ensure labels are white */
         }
         #note-form input, #note-form textarea, #note-form select, #note-form button {
             margin-top: 5px;
@@ -33,20 +34,20 @@
             font-size: 16px;
             width: 100%;
             box-sizing: border-box;
-            background-color: #555; /* Darker background for inputs */
-            color: white; /* White text in inputs */
-            border: 1px solid #777; /* Light border */
-            border-radius: 4px; /* Slightly rounded corners */
+            background-color: #333333; /* Darker input background */
+            color: #ffffff; /* Ensure text inside inputs is white */
+            border: 1px solid #444444; /* Border color for inputs */
         }
         #note-form button {
             margin-top: 10px;
             padding: 10px;
-            background-color: #777; /* Slightly lighter background for buttons */
-            border: 1px solid #999;
+            background-color: #444444; /* Darker button background */
+            border: 1px solid #555555; /* Button border color */
             cursor: pointer;
+            color: #ffffff; /* Ensure button text is white */
         }
         #note-form button:hover {
-            background-color: #999; /* Lighter background on hover */
+            background-color: #555555;
         }
         #message {
             margin-top: 10px;
@@ -59,19 +60,20 @@
             text-align: center;
         }
         #random-note .red {
-            color: red;
+            color: #ff0000; /* Keep red text for emphasis */
         }
         #edit-note-button, #delete-note-button {
             margin-top: 15px;
             display: none;
             padding: 10px;
-            background-color: #555; /* Dark background for the buttons */
-            border: 1px solid #777;
+            background-color: #333333; /* Darker button background */
+            border: 1px solid #444444; /* Button border color */
             cursor: pointer;
             text-align: center;
+            color: #ffffff; /* Ensure button text is white */
         }
         #edit-note-button:hover, #delete-note-button:hover {
-            background-color: #777; /* Lighter background on hover */
+            background-color: #555555;
         }
     </style>
 </head>
@@ -95,6 +97,7 @@
 
     <button onclick="saveNote()">Save Note</button>
     <button onclick="fetchRandomNote()">Random Note</button>
+    <button onclick="fetchRandomTodoNote()">Random Todo</button> <!-- New Button for Random Todo -->
 
     <p id="message"></p>
 
@@ -149,13 +152,24 @@
         const response = await fetch('/api/notes/random');
         const note = await response.json();
 
+        displayRandomNote(note, response.ok);
+    }
+
+    async function fetchRandomTodoNote() { // Function to fetch a random Todo note
+        const response = await fetch('/api/notes/randomTodo');
+        const note = await response.json();
+
+        displayRandomNote(note, response.ok);
+    }
+
+    function displayRandomNote(note, success) {
         const titleEl = document.getElementById('random-note-title');
         const contentEl = document.getElementById('random-note-content');
         const typeEl = document.getElementById('random-note-type');
         const editButton = document.getElementById('edit-note-button');
         const deleteButton = document.getElementById('delete-note-button');
 
-        if (response.ok) {
+        if (success) {
             currentNoteId = note.id; // Store the ID of the fetched note
             titleEl.innerHTML = `<span class="red">Title:</span> ${note.title}`;
             contentEl.innerHTML = `<span class="red">Content:</span> ${note.content}`;
