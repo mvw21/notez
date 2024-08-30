@@ -10,4 +10,5 @@ public interface NoteService {
     void delete(Long id);
 
     NoteDto getRandomNote();
+    NoteDto getRandomTodoNote();
 }

@@ -4,5 +4,6 @@ public enum NoteType {
     PFGAME,
     CODING,
     LIFE,
-    OTHER
+    OTHER,
+    TODO
 }

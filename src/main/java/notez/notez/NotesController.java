@@ -72,5 +72,15 @@ public class NotesController {
         }
     }
 
+    @GetMapping("/randomTodo")
+    public ResponseEntity<NoteDto> getRandomTodoNote() {
+        NoteDto randomTodoNote = notesService.getRandomTodoNote();
+        if (randomTodoNote != null) {
+            return ResponseEntity.ok(randomTodoNote);
+        } else {
+            return ResponseEntity.noContent().build(); // Return 204 if no note found
+        }
+    }
+
 
 }

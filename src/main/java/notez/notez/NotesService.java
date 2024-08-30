@@ -7,8 +7,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 @Service
 public class NotesService implements NoteService{
@@ -62,6 +64,28 @@ public class NotesService implements NoteService{
         Pageable pageable = PageRequest.of(randomIndex, 1); // Fetch one note at the random index
 
         List<NoteEntity> randomNotes = notesRepository.findAll(pageable).getContent();
+
+        if (!randomNotes.isEmpty()) {
+            NoteEntity randomNote = randomNotes.get(0);
+            return noteTransformer.toDto(randomNote);
+        } else {
+            return null; // Handle the case where the note wasn't found
+        }
+    }
+
+    @Override
+    public NoteDto getRandomTodoNote() {
+        // Get total count of TODO notes directly from the repository
+        long count = notesRepository.countByType(NoteType.TODO);
+
+        if (count == 0) {
+            return null; // Handle the case where there are no TODO notes
+        }
+
+        int randomIndex = (int) (Math.random() * count); // Generate a random index
+        Pageable pageable = PageRequest.of(randomIndex, 1); // Fetch one TODO note at the random index
+
+        List<NoteEntity> randomNotes = notesRepository.findByType(NoteType.TODO, pageable).getContent();
 
         if (!randomNotes.isEmpty()) {
             NoteEntity randomNote = randomNotes.get(0);
