@@ -86,7 +86,7 @@ public class NotesService implements NoteService{
         Pageable pageable = PageRequest.of(randomIndex, 1); // Fetch one note at the random index
 
         List<NoteEntity> randomNotes = notesRepository.findAll(pageable).getContent();
-        List<NoteEntity> other = randomNotes.stream().filter(x -> x.getType().name().equals("OTHER")).collect(Collectors.toList());
+        List<NoteEntity> other = randomNotes.stream().filter(x -> x.getType().equals(NoteType.OTHER)).toList();
 
         if (!other.isEmpty()) {
             NoteEntity randomNote = other.get(0);
