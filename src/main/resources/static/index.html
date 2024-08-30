@@ -121,13 +121,13 @@
         const type = document.getElementById('type').value;
 
         const noteData = {
-            id: currentNoteId,  // Use the currentNoteId to update the existing note
+            id: null,  // Ensure ID is null to create a new note
             title: title,
             content: content,
             type: type
         };
 
-        const url = currentNoteId ? '/api/notes/edit' : '/api/notes/save'; // Determine the URL based on whether we're editing or creating a note
+        const url = '/api/notes/save'; // Always use save for new notes
 
         const response = await fetch(url, {
             method: 'POST',
