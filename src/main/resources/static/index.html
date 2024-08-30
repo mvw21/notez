@@ -98,7 +98,7 @@
 
     <button onclick="saveNote()">Save Note</button>
     <button onclick="fetchRandomNote()">Random Note</button>
-    <button onclick="fetchRandomTodoNote()">Random Todo</button> <!-- New Button for Random Todo -->
+    <button onclick="fetchRandomTodoNote()">Random Todo</button>
 
     <p id="message"></p>
 
@@ -121,13 +121,13 @@
         const type = document.getElementById('type').value;
 
         const noteData = {
-            id: null,  // Ensure ID is null to create a new note
+            id: currentNoteId,  // Use currentNoteId to update the existing note
             title: title,
             content: content,
             type: type
         };
 
-        const url = '/api/notes/save'; // Always use save for new notes
+        const url = currentNoteId ? '/api/notes/edit' : '/api/notes/save'; // Use edit URL if ID exists
 
         const response = await fetch(url, {
             method: 'POST',
@@ -139,8 +139,8 @@
 
         const messageEl = document.getElementById('message');
         if (response.ok) {
-            messageEl.textContent = 'Note saved!';
-            currentNoteId = null; // Reset the ID after saving
+            messageEl.textContent = currentNoteId ? 'Note updated!' : 'Note saved!';
+            currentNoteId = null; // Reset the ID after saving or updating
             document.getElementById('title').value = '';
             document.getElementById('content').value = '';
             document.getElementById('type').value = 'PFGAME';
