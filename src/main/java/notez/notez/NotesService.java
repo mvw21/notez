@@ -12,7 +12,6 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-import static sun.jvm.hotspot.runtime.BasicObjectLock.size;
 
 @Service
 public class NotesService implements NoteService{
